@@ -13,6 +13,8 @@ package com.canchapp.usuarios.infrastructure;
 
 import com.canchapp.usuarios.domain.Usuario;
 import com.canchapp.usuarios.domain.UsuarioRepository;
+import com.canchapp.usuarios.infrastructure.entity.UserEntity;
+import com.canchapp.usuarios.infrastructure.entity.UserEntityRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import jakarta.persistence.EntityNotFoundException;
@@ -28,10 +30,10 @@ import java.util.Optional;
 @Repository
 public class UserJpaAdapter implements UsuarioRepository {
 
-    private final com.canchapp.usuarios.infrastructure.entity.UserEntity jpaRepository;
+    private final UserEntityRepository jpaRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserJpaAdapter(com.canchapp.usuarios.infrastructure.entity.UserEntity jpaRepository) {
+    public UserJpaAdapter(UserEntityRepository jpaRepository) {
         this.jpaRepository = jpaRepository;
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
@@ -52,7 +54,7 @@ public class UserJpaAdapter implements UsuarioRepository {
         // Encriptar contraseña con BCrypt antes de guardar
         String encodedPassword = passwordEncoder.encode(usuario.getPassword());
         // Mapear dominio a entidad JPA
-        com.canchapp.usuarios.infrastructure.entity.UserEntity entity = toEntity(usuario);
+        UserEntity entity = toEntity(usuario);
         entity.setPassword(encodedPassword);
         entity = jpaRepository.save(entity);
         return toDomain(entity);
@@ -64,7 +66,7 @@ public class UserJpaAdapter implements UsuarioRepository {
      * @param entity entidad JPA
      * @return objeto de dominio
      */
-    private Usuario toDomain(com.canchapp.usuarios.infrastructure.entity.UserEntity entity) {
+    private Usuario toDomain(UserEntity entity) {
         Usuario usuario = new Usuario();
         usuario.setId(entity.getId());
         usuario.setNombre(entity.getNombre());
@@ -89,8 +91,8 @@ public class UserJpaAdapter implements UsuarioRepository {
      * @param usuario objeto de dominio
      * @return entidad JPA lista para persistir
      */
-    private com.canchapp.usuarios.infrastructure.entity.UserEntity toEntity(Usuario usuario) {
-        com.canchapp.usuarios.infrastructure.entity.UserEntity entity = new com.canchapp.usuarios.infrastructure.entity.UserEntity();
+    private UserEntity toEntity(Usuario usuario) {
+        UserEntity entity = new UserEntity();
         entity.setId(usuario.getId());
         entity.setNombre(usuario.getNombre());
         entity.setApellido(usuario.getApellido());
