@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  backend:
+    name: Pruebas y cobertura
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detectar si ya existe el proyecto Maven
+        id: proyecto
+        run: echo "existe=$([ -f pom.xml ] && echo si || echo no)" >> "$GITHUB_OUTPUT"
+
+      - name: Configurar Java 17
+        if: steps.proyecto.outputs.existe == 'si'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+          cache: maven
+
+      - name: Verificar (pruebas + cobertura del dominio)
+        if: steps.proyecto.outputs.existe == 'si'
+        run: |
+          if [ -x ./mvnw ]; then
+            ./mvnw -B -ntp verify
+          else
+            mvn -B -ntp verify
+          fi
+
+      # Cuando exista springdoc, publica aquí el openapi.json que validan
+      # Frontend y AdminWeb (AGENTS.md §4 y §12).
