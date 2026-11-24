@@ -1,0 +1,21 @@
+# Backend · Maven / Java
+target/
+*.class
+
+# Entorno y secretos: nunca se versionan
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+application-local.properties
+
+# IDE y sistema operativo
+.idea/
+*.iml
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
