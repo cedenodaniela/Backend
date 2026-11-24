@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: canchapp_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: canchapp
+      POSTGRES_USER: canchapp
+      POSTGRES_PASSWORD: canchapp2024
+      # locale removido: es_ES.UTF-8 no disponible en esta imagen
+      # Si se necesita encoding, usar solo UTF-8 por defecto
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./src/main/resources/sql:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U canchapp -d canchapp"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - canchapp_net
+
+networks:
+  canchapp_net:
+    driver: bridge
+
+volumes:
+  pg_data:
+    driver: local
