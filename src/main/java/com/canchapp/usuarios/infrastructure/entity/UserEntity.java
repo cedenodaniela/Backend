@@ -15,6 +15,12 @@
  * @see RN-07
  * @see RF-01
  */
+package com.canchapp.usuarios.infrastructure.entity;
+
+/**
+ * Entidad JPA UserEntity que mapea a la tabla 'usuario'.
+ * Contiene los atributos y mapeo de base de datos para el usuario del sistema.
+ */
 @Entity
 @Table(name = "usuario", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"email"})
