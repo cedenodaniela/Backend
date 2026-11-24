@@ -2,7 +2,7 @@
  * Entidad JPA que mapea a la tabla 'usuario' de la base de datos.
  * <p>
  * Esta es la entidad que Spring Data JPA persiste. Es la única clase
- * del proyecto que importajakarta.persistence y anotaciones Spring.
+ * del proyecto que importa javax.persistence y anotaciones Spring.
  * <p>
  * Tabla: usuario (RN-07, RF-01)
  * <p>
@@ -17,13 +17,22 @@
  */
 package com.canchapp.usuarios.infrastructure.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Column;
+import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
+
 /**
  * Entidad JPA UserEntity que mapea a la tabla 'usuario'.
  * Contiene los atributos y mapeo de base de datos para el usuario del sistema.
  */
 @Entity
 @Table(name = "usuario", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email"})
+    @UniqueConstraint(columnNames = {"email"})
 })
 public class UserEntity {
 
